@@ -12,6 +12,8 @@ public class GenerateMaze : MonoBehaviour {
 	public float wallThickness;
 	public float wallHeight;
 
+	public Material floorMaterial;
+
 	Cell[,] cells;
 
 	// Use this for initialization
@@ -42,8 +44,16 @@ public class GenerateMaze : MonoBehaviour {
 			}
 		}
 
+		//Create two edge walls
 		createWall (-wallLength, wallLength * (mazeHeight - 2) * 0.5f, wallThickness, wallLength * mazeHeight);
 		createWall (wallLength * (mazeWidth - 2) * 0.5f, -wallLength, wallLength * mazeWidth, wallThickness);
+
+		GameObject floor = GameObject.CreatePrimitive(PrimitiveType.Plane);
+
+		
+		floor.transform.Translate (new Vector3 (wallLength * (mazeWidth - 2) * 0.5f, 0, wallLength * (mazeHeight - 2) * 0.5f));
+		floor.transform.localScale = new Vector3 (wallLength * mazeWidth * 0.1f, 1, wallLength * mazeHeight * 0.1f);
+		floor.GetComponent<MeshRenderer> ().material = floorMaterial;
 	}
 
 	void hunt(Cell start) {
@@ -166,9 +176,11 @@ public class GenerateMaze : MonoBehaviour {
 
 		if (cell.left) {
 			createWall (x, y - wallLength * 0.5f, wallThickness, wallLength);
+
 		}
 		if (cell.top) {
 			createWall (x - wallLength * 0.5f, y, wallLength, wallThickness);
+
 		}
 	}
 
@@ -176,8 +188,6 @@ public class GenerateMaze : MonoBehaviour {
 		GameObject wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		wall.transform.Translate(new Vector3(x, 0, y));
 		wall.transform.localScale = new Vector3(width, wallHeight, height);
-
-		//wall.AddComponent<Rigidbody>();
 	}
 
 	//Inclusive of min, exclusive of max
