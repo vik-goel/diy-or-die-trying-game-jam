@@ -175,11 +175,11 @@ public class GenerateMaze : MonoBehaviour {
 		float y = gridY * wallLength - wallThickness * 0.5f;
 
 		if (cell.left) {
-			createWall (x, y - wallLength * 0.5f, wallThickness, wallLength);
+			createWall (x, y - wallLength * 0.5f, wallThickness, wallLength + wallThickness);
 
 		}
 		if (cell.top) {
-			createWall (x - wallLength * 0.5f, y, wallLength, wallThickness);
+			createWall (x - wallLength * 0.5f, y, wallLength + wallThickness, wallThickness);
 
 		}
 	}
