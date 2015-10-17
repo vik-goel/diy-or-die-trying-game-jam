@@ -10,8 +10,6 @@ public class GenerateMaze : MonoBehaviour {
 	public float wallThickness;
 	public float wallHeight;
 
-	public GameObject wallParent;
-
 	Cell[,] cells;
 
 	// Use this for initialization
@@ -28,7 +26,7 @@ public class GenerateMaze : MonoBehaviour {
 
 
 		//Remove a bunch of walls at the start to speed things up
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 20; i++) {
 			removeWall();
 		}
 
