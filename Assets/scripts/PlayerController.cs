@@ -5,13 +5,15 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class PlayerController : MonoBehaviour {
 
-	public float speed = 10;
+	public float speed = 6;
 	float rotx = 0, roty = 0;
+	bool buttonDown;
 
 	Rigidbody myRigidBody;
 	// Use this for initialization
 	void Start () {
 		myRigidBody = GetComponent<Rigidbody> ();
+		buttonDown = false;
 	}
 
 	public static float ClampAngle (float angle, float min, float max)
@@ -81,5 +83,20 @@ public class PlayerController : MonoBehaviour {
 			transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward); 
 		}*/
 		//Quaternion.FromToRotation (transform.forward, new Vector3 (CrossPlatformInputManager.GetAxis ("Vertical"), CrossPlatformInputManager.GetAxis ("Horizontal"), 0));
+
+		Debug.Log(CrossPlatformInputManager.GetAxis ("Front"));
+		//(CrossPlatformInputManager.GetAxis ("Sides"));
+		if (buttonDown) {
+			transform.position += new Vector3(transform.forward.x,0,transform.forward.z) * Time.deltaTime * speed;
+		} else {
+			myRigidBody.velocity = new Vector3(0,myRigidBody.velocity.y,0);
+		}
+	}
+
+	public void walk (){
+		buttonDown = true;
+	}
+	public void dontWalk(){
+		buttonDown = false;
 	}
 }
