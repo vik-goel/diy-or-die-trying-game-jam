@@ -12,7 +12,7 @@ public class GenerateMaze : MonoBehaviour {
 	public float wallThickness;
 	public float wallHeight;
 
-	public Material floorMaterial;
+	public Material floorMaterial, wallMaterial;
 
 	Cell[,] cells;
 
@@ -188,6 +188,8 @@ public class GenerateMaze : MonoBehaviour {
 		GameObject wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		wall.transform.Translate(new Vector3(x, 0, y));
 		wall.transform.localScale = new Vector3(width, wallHeight, height);
+
+		wall.GetComponent<MeshRenderer> ().material = wallMaterial;
 	}
 
 	//Inclusive of min, exclusive of max
