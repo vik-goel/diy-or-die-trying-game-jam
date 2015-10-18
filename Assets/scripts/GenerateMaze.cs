@@ -48,12 +48,21 @@ public class GenerateMaze : MonoBehaviour {
 		createWall (-wallLength, wallLength * (mazeHeight - 2) * 0.5f, wallThickness, wallLength * mazeHeight);
 		createWall (wallLength * (mazeWidth - 2) * 0.5f, -wallLength, wallLength * mazeWidth, wallThickness);
 
-		GameObject floor = GameObject.CreatePrimitive(PrimitiveType.Plane);
-
+		{
+			GameObject floor = GameObject.CreatePrimitive (PrimitiveType.Plane);
 		
-		floor.transform.Translate (new Vector3 (wallLength * (mazeWidth - 2) * 0.5f, 0, wallLength * (mazeHeight - 2) * 0.5f));
-		floor.transform.localScale = new Vector3 (wallLength * mazeWidth * 0.1f, 1, wallLength * mazeHeight * 0.1f);
-		floor.GetComponent<MeshRenderer> ().material = floorMaterial;
+			floor.transform.Translate (new Vector3 (wallLength * (mazeWidth - 2) * 0.5f, -wallHeight * 0.5f, wallLength * (mazeHeight - 2) * 0.5f));
+			floor.transform.localScale = new Vector3 (wallLength * mazeWidth * 0.1f, 1, wallLength * mazeHeight * 0.1f);
+			floor.GetComponent<MeshRenderer> ().material = floorMaterial;
+		}
+
+		if(false){
+			GameObject floor = GameObject.CreatePrimitive (PrimitiveType.Plane);
+			
+			floor.transform.Translate (new Vector3 (wallLength * (mazeWidth - 2) * 0.5f, 0, wallLength * (mazeHeight - 2) * 0.5f));
+			floor.transform.localScale = new Vector3 (wallLength * mazeWidth * 0.1f, -1, wallLength * mazeHeight * 0.1f);
+			floor.GetComponent<MeshRenderer> ().material = floorMaterial;
+		}
 	}
 
 	void hunt(Cell start) {
