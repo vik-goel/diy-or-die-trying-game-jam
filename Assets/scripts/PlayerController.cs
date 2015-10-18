@@ -5,8 +5,15 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class PlayerController : MonoBehaviour {
 
-	public float speed = 6;
-	float rotx = 0, roty = 0;
+	public float speed;
+	public float rotateXSensitivity;
+	public float rotateYSensitivity;
+	public float noMovementBuffer;
+
+	public float minYAngle;
+	public float maxYAngle;
+
+	float rotX = 0, rotY = 0;
 	bool buttonDown;
 
 	Rigidbody myRigidBody;
@@ -16,8 +23,7 @@ public class PlayerController : MonoBehaviour {
 		buttonDown = false;
 	}
 
-	public static float ClampAngle (float angle, float min, float max)
-	{
+	float ClampAngle (float angle, float min, float max) {
 		if (angle < -360F)
 			angle += 360F;
 		if (angle > 360F)
@@ -25,71 +31,37 @@ public class PlayerController : MonoBehaviour {
 		return Mathf.Clamp (angle, min, max);
 	}
 
+	float clampRotationAxis(float axis) {
+		if (Mathf.Abs (axis) > noMovementBuffer) {
+			if (axis > 0) {
+				return axis - noMovementBuffer;
+			} else {
+				return axis + noMovementBuffer;
+			}
+		}
+
+		return 0;
+	}
+
 	// Update is called once per frame
 	void FixedUpdate () {
-		rotx += CrossPlatformInputManager.GetAxis ("Horizontal") * 3;
-		roty += CrossPlatformInputManager.GetAxis ("Vertical") * 3;
+		float axisX = clampRotationAxis(CrossPlatformInputManager.GetAxis ("Horizontal"));
+		float axisY = clampRotationAxis(CrossPlatformInputManager.GetAxis ("Vertical"));
 
-		//if (roty > 40)
-			//roty = 40;
+		rotX += axisX * rotateXSensitivity * Time.fixedDeltaTime;
+		rotY +=  axisY * rotateYSensitivity * Time.fixedDeltaTime;
 
-		roty = ClampAngle (roty, -60, 60);
+		rotY = ClampAngle (rotY, minYAngle, maxYAngle);
 
-		Quaternion qx = Quaternion.AngleAxis (rotx, Vector3.up);
-		Quaternion qy = Quaternion.AngleAxis (roty, Vector3.left);
+		Quaternion qx = Quaternion.AngleAxis (rotX, Vector3.up);
+		Quaternion qy = Quaternion.AngleAxis (rotY, Vector3.left);
 
 		transform.localRotation = qx * qy;
 
-		/*
-		//transform.LookAt (lookVec);
-
-		Vector3 rot1 = new Vector3 (0f, CrossPlatformInputManager.GetAxis ("Vertical"), 0f);
-		Quaternion q1 = Quaternion.LookRotation (rot1);
-		Vector3 rot2 = new Vector3 (CrossPlatformInputManager.GetAxis ("Horizontal"), 0f, 0f);
-		Quaternion q2 = Quaternion.LookRotation (rot2);
-		Debug.Log (q2);
-		//transform.rotation = Quaternion.Slerp(transform.rotation, q1, 5 * Time.deltaTime);
-		transform.rotation = Quaternion.Slerp(transform.rotation, transform.rotation * q2 * q1, Time.deltaTime);
-
-		//Matrix4x4 result = Matrix4x4.TRS(new Vector3(0, 0, 0), q1, new Vector3(1, 1, 1))*Matrix4x4.TRS(new Vector3(0, 0, 0), q2, new Vector3(1, 1, 1));
-		//Quaternion.
-
-		//transform.rotation = Quaternion.LookRotation(new Vector3 (transform.eulerAngles.x, transform.eulerAngles.y, 0f));
-		//transform.rotation = new Quaternion (transform.rotation.x, transform.rotation.y, 0, transform.rotation.w);
-		transform.rotation = Quaternion.LookRotation (transform.forward);*/
-
-
-	/*	Vector3 lookVec = new Vector3 (
-		                               CrossPlatformInputManager.GetAxis("Vertical")* 5f, 0f,
-		                               0f);
-		Vector3 turnVec = new Vector3 (0f, 
-		                               CrossPlatformInputManager.GetAxis("Horizontal") * 0.6f, 
-		                               0f);
-		transform.Rotate (turnVec);
-		Debug.Log (transform.rotation.x);
-		if (transform.eulerAngles.x < 50) {
-			transform.Rotate(lookVec);
-		}
-*/
-		//float theta = Mathf.Rad2Deg*Mathf.Atan2 (CrossPlatformInputManager.GetAxis ("Vertical"), CrossPlatformInputManager.GetAxis ("Horizontal"));
-
-		//transform.rotation = Quaternion.AngleAxis (theta, transform.forward);
-
-		 /*var joystickHorizontal = UnityStandardAssets.CrossPlatformInput.CrossPlatformInputManager.GetAxis("Horizontal"); 
-		var joystickVertical = UnityStandardAssets.CrossPlatformInput.CrossPlatformInputManager.GetAxis("Vertical"); 
-
-		if (joystickHorizontal != 0 && joystickVertical != 0) {
-			var angle = Mathf.Atan2(joystickVertical , joystickHorizontal ) * Mathf.Rad2Deg; 
-			transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward); 
-		}*/
-		//Quaternion.FromToRotation (transform.forward, new Vector3 (CrossPlatformInputManager.GetAxis ("Vertical"), CrossPlatformInputManager.GetAxis ("Horizontal"), 0));
-
-		Debug.Log(CrossPlatformInputManager.GetAxis ("Front"));
-		//(CrossPlatformInputManager.GetAxis ("Sides"));
 		if (buttonDown) {
-			transform.position += new Vector3(transform.forward.x,0,transform.forward.z) * Time.deltaTime * speed;
+			transform.position += new Vector3(transform.forward.x, 0,transform.forward.z) * Time.fixedDeltaTime * speed;
 		} else {
-			myRigidBody.velocity = new Vector3(0,myRigidBody.velocity.y,0);
+			myRigidBody.velocity = new Vector3(0, myRigidBody.velocity.y, 0);
 		}
 	}
 

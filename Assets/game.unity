@@ -288,6 +288,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  rotateXSensitivity: 35
+  rotateYSensitivity: 25
+  noMovementBuffer: .100000001
+  minYAngle: -60
+  maxYAngle: 60
 --- !u!1 &333562294
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,8 +380,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b61044944a3ac49e3a369a270dfe77ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mazeWidth: 50
-  mazeHeight: 50
+  mazeWidth: 20
+  mazeHeight: 20
   wallLength: 20
   wallThickness: 2
   wallHeight: 20
